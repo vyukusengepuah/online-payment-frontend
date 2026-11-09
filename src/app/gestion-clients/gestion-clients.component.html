@@ -1,0 +1,85 @@
+<div class="container mt-4">
+  <h2>Gestion des Partenaires (Merchants & Billers)</h2>
+
+  <!-- Formulaire d'ajout -->
+  <div class="card mb-4">
+    <div class="card-header">Ajouter un nouveau partenaire</div>
+    <div class="card-body">
+      <form (ngSubmit)="ajouterClient()" #clientForm="ngForm">
+        <div class="row">
+          
+          <!-- Champ Code (MerchantCode) -->
+          <div class="col-md-3 mb-3">
+            <label>Code (Merchant Code)</label>
+            <div class="inner-addon left-addon">
+              <i class="fas fa-key"></i>
+              <input type="text" class="form-control" name="merchantCode" [(ngModel)]="nouveauClient.merchantCode" required placeholder="Ex: 46547">
+            </div>
+          </div>
+
+          <!-- Champ Nom -->
+          <div class="col-md-3 mb-3">
+            <label>Nom</label>
+            <div class="inner-addon left-addon">
+              <i class="fas fa-user"></i>
+              <input type="text" class="form-control" name="name" [(ngModel)]="nouveauClient.name" required placeholder="Ex: AKAGURIRO">
+            </div>
+          </div>
+
+          <!-- Champ URL Callback -->
+          <div class="col-md-3 mb-3">
+            <label>URL Callback</label>
+            <div class="inner-addon left-addon">
+              <i class="fas fa-link"></i>
+              <input type="text" class="form-control" name="url_callback" [(ngModel)]="nouveauClient.url_callback" placeholder="https://...">
+            </div>
+          </div>
+
+          <!-- Champ Type -->
+          <div class="col-md-3 mb-3">
+            <label>Type</label>
+            <select class="form-control" name="type" [(ngModel)]="nouveauClient.type">
+              <option value="MERCHANT">Merchant</option>
+              <option value="BILLER">Biller</option>
+            </select>
+          </div>
+
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!clientForm.valid">Ajouter</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tableau de la liste -->
+  <div class="card">
+    <div class="card-header">Liste des Partenaires</div>
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>URL Callback</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of listeClients">
+            <td>{{ client.merchantCode }}</td>
+            <td>{{ client.name }}</td>
+            <td>{{ client.type }}</td>
+            <td>{{ client.url_callback }}</td>
+            <td>
+              <!-- Seul le bouton Supprimer reste -->
+              <button class="btn btn-sm btn-danger" (click)="supprimerClient(client.merchantCode)">Supprimer</button>
+            </td>
+          </tr>
+          <tr *ngIf="listeClients.length === 0">
+            <td colspan="5" class="text-center">Aucun partenaire enregistré.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

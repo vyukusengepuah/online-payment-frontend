@@ -1,0 +1,412 @@
+<div bsModal  #largeModal="bs-modal"[config]="{backdrop: 'static',  keyboard: false}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-success" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Cette entité n'existe pas dans ce systeme, voulez-vous l'enregistrer?</h4>
+          <button style="color: red;" type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+  
+          <div style="width: 100%; min-height: 100px">
+            <table style="font-size: 10px;">
+                <tr class="table  table-bordered" *ngFor="let s of tableau_societe"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+            </table>
+          </div>
+          
+  
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-success" (click)="enregistrer_societe();largeModal.hide()">Oui</button>
+          <button type="button" class="btn btn-danger" (click)="largeModal.hide()">Non</button>
+          <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+          <!-- <button type="button" class="btn btn-success">Ajouter</button> -->
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+<div class="animated fadeIn">
+    <div class="card card-default">
+      
+        <div class="card-body">
+            <form [formGroup]="user_form" (ngSubmit)="research()" method="POST" enctype="multipart/form-data">
+                <div class="row" style="margin-bottom: -40px;">
+                    
+                    <div class="col-md-4 form-group">
+                                        
+                        <mat-form-field appearance="fill"  style="width: 100%;">
+                            <mat-label>BRANCHE: <span style="color: red;">*</span></mat-label>
+                            <mat-select formControlName="branche" (click)="refresh_branche()"
+                             >
+                            
+                                <mat-option>
+                                    <ngx-mat-select-search formControlName="filter_branche"
+                                    placeholderLabel="Research..." 
+                                    (keyup)="onKey_branche($event.target.value)" (click)="refresh_branche()"></ngx-mat-select-search>
+                                
+                                </mat-option>
+                                    
+                                <mat-option *ngFor="let p of branche_filtre" [value]="p.AGE">
+                                    {{p.AGE}}-{{p.LIB}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+    
+                        
+                    </div>
+                    <div class="col-md-4 form-group">
+                                        
+                        <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                            <mat-label>NUMERO DE COMPTE: <span style="color: red;">*</span></mat-label>
+                            <input matInput formControlName="compte" id="compte" autocomplete="off"> 
+                            
+                        </mat-form-field>
+    
+                        
+                    </div>
+                    
+                    <div class="col-md-2 form-group" style="padding: 10px;">
+                        
+                        <input type="submit" id="submit"  class="btn btn-success active form-control" value="Recherche">    
+                    </div>
+    
+                    
+                
+                </div>
+            </form>
+            <div class="row">
+                
+                                
+                             
+            </div>
+          </div>
+    </div>
+</div>
+
+<div class="animated fadeIn" *ngIf="societ_is_found">
+    <div class="card card-default">
+      
+      <div class="card-body">
+        
+        <div class="row">
+            <div style="padding: 10px;" class="col-md-8" >
+                <table style="font-size: 10px;">
+                    <tr class="table  table-bordered" *ngFor="let s of tableau_societe"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+                </table>
+            </div>
+            <div style="padding: 10px;" class="col-md-4" >
+                <div *ngIf="!account_is_found">
+                    <span  class="blink" style="font-size: 16px;">Cette entité existe mais ce compte de recherche n'est pas enregistré. Voulez-vous l'enregistrer?</span><p></p>
+                    <button type="button" class="btn btn-success" (click)="enregistrer_compte();">Enregistrer</button><p></p>
+                </div>
+                <table style="font-size: 10px;" class="table  table-bordered">
+                    <tr><th>#</th><th>COMPTE</th></tr>
+                    <tr  *ngFor="let x of accounts; let i = index"><td class="pt-2 pb-2"> {{i+1}}</td><td class="pt-2 pb-2">{{x.COMPTE}}</td></tr>
+                </table>
+            </div>
+
+            
+        
+        </div>
+        <form [formGroup]="user_form3" (ngSubmit)="save_type_validation()" method="POST" enctype="multipart/form-data">
+            <div class="row" style="margin-bottom: -40px;">
+                
+                <!-- <div class="col-md-4 form-group">
+                                    
+                    <mat-form-field appearance="fill"  style="width: 100%;">
+                        <mat-label>TYPE DE VALIDATION: <span style="color: red;">*</span></mat-label>
+                        <mat-select formControlName="type_validation" (selectionChange)="select_type_validation($event)" >
+                        
+                            <mat-option  [value]="">
+                               --
+                            </mat-option>
+                            <mat-option  [value]="0">
+                                MAKER-CKECKER
+                            </mat-option>
+                            <mat-option  [value]="1">
+                                NOMBRE FIXE DE VALIDATION
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> 
+
+                    
+                </div> -->
+                <div class="col-md-4 form-group" >
+                                    
+                    <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                        <mat-label>NOMBRE DE VALIDATION: <span style="color: red;">*</span></mat-label>
+                        <input required type="number" matInput formControlName="nombre" id="nombre" autocomplete="off"> 
+                        
+                    </mat-form-field>
+
+                    
+                </div>
+                
+                <div class="col-md-2 form-group" style="padding: 10px;">
+                    
+                    <input type="submit" id="submit"  class="btn btn-success active form-control" value="Enregistrer">    
+                </div>
+
+            
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+
+<!-- <div class="animated fadeIn"  *ngIf="societ_is_found">
+    <div class="card card-default">
+      
+        <div class="card-body">
+           
+            <div class="row">
+                          
+            </div>
+          </div>
+    </div>
+</div> -->
+
+<div class="animated fadeIn" *ngIf="societ_is_found">
+    <div class="card card-default">
+      
+      <div class="card-body">
+        
+        <div class="row">
+            <div class="col-md-12" style="margin-bottom: 30px;" *ngIf="usersession.data.VALIDATION_LEVEL==1||usersession.data.VALIDATION_LEVEL==3">
+            
+                  <mat-accordion class="example-headers-align" multi>
+                    <mat-expansion-panel [expanded]="is_update"  (closed)="close()">
+                      <mat-expansion-panel-header>
+                        <mat-panel-title ><span class="fa fa-user" style="font-size: 35px; margin-right: 20px;"></span><h5> Formulaire de gestion des utilisateurs</h5> </mat-panel-title>
+                        <mat-panel-description>
+                          
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                  
+                      <form *ngIf="!is_update" [formGroup]="user_form1" (ngSubmit)="saveUser()" method="POST" enctype="multipart/form-data">
+                        <div class="row" style="margin-bottom: -40px;font-size: 12px;" >
+                            
+                            
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>NOM: <span style="color: red;">*</span></mat-label>
+                                    <input (keyup)="set_username()" matInput formControlName="name" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>PRENOM: <span style="color: red;">*</span></mat-label>
+                                    <input (keyup)="set_username()" matInput formControlName="lastname" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>NOM D'UTILISATEUR: <span style="color: red;">*</span></mat-label>
+                                    <input matInput formControlName="username" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>TELEPHONE: <span style="color: red;">*</span></mat-label>
+                                    <input matInput formControlName="tel" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>EMAIL DE NOTIFICATION: <span style="color: red;">*</span></mat-label>
+                                    <input matInput formControlName="email" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <!-- <div class="col-md-4 form-group" *ngIf="!is_nombre"> -->
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>NIVEAU D'ACCES: <span style="color: red;">*</span></mat-label>
+                                    <!-- <input matInput formControlName="niveau" id="compte" autocomplete="off">  -->
+                                    <mat-select formControlName="niveau">
+                                        <mat-option  [value]="1">
+                                            INITIATION
+                                        </mat-option>
+                                        <mat-option  [value]="2">
+                                            VALIDATION
+                                        </mat-option>
+                                        <mat-option  [value]="3">
+                                            INITIATION ET VALIDATION
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            
+                            <div class="col-md-2 form-group" style="padding: 10px;">
+                                
+                                <input type="submit" id="submit"  class="btn btn-success active form-control" value="Enregistrer">    
+                            </div>
+            
+                            
+                        
+                        </div>
+                      </form>
+
+                      <form *ngIf="is_update" [formGroup]="user_form2" (ngSubmit)="updateUser()" method="POST" enctype="multipart/form-data">
+                        <div class="row" style="margin-bottom: -40px;font-size: 12px;" >
+                            
+                            
+                            <div class="col-md-4 form-group">
+                                <input type="hidden" formControlName="id" id="id" autocomplete="off"> 
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>NOM: <span style="color: red;">*</span></mat-label>
+                                    <input  matInput formControlName="name" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>PRENOM: <span style="color: red;">*</span></mat-label>
+                                    <input  matInput formControlName="lastname" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>NOM D'UTILISATEUR: <span style="color: red;">*</span></mat-label>
+                                    <input matInput formControlName="username" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>TELEPHONE: <span style="color: red;">*</span></mat-label>
+                                    <input matInput formControlName="tel" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <div class="col-md-4 form-group">
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>EMAIL DE NOTIFICATION: <span style="color: red;">*</span></mat-label>
+                                    <input matInput formControlName="email" id="compte" autocomplete="off"> 
+                                    
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            <!-- <div class="col-md-4 form-group" *ngIf="!is_nombre"> -->
+                            <div class="col-md-4 form-group" >
+
+                                                
+                                <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                    <mat-label>NIVEAU D'ACCES: <span style="color: red;">*</span></mat-label>
+                                    <!-- <input matInput formControlName="niveau" id="compte" autocomplete="off">  -->
+                                    <mat-select formControlName="niveau">
+                                        <mat-option  [value]="1">
+                                            INITIATION
+                                        </mat-option>
+                                        <mat-option  [value]="2">
+                                            VALIDATION
+                                        </mat-option>
+                                        <mat-option  [value]="3">
+                                            INITIATION ET VALIDATION
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+            
+                                
+                            </div>
+                            
+                            <div class="col-md-2 form-group" style="padding: 10px;">
+                                
+                                <input type="submit" id="submit"  class="btn btn-success active form-control" value="Modifier">    
+                            </div>
+            
+                            
+                        
+                        </div>
+                      </form>
+                    </mat-expansion-panel>
+                    
+                  </mat-accordion>
+                  
+            </div>
+            <div class="col-md-12" style="margin-bottom: 30px;" *ngIf="usersession.data.VALIDATION_LEVEL>=2">
+                <h5 class="badge-danger">Listes des utilisateurs non encore verifiés</h5>
+                <table style="font-size: 10px;" class="table  table-bordered">
+                    <tr><th>profil</th><th>Nom</th><th>Prenom</th><th>nom d'utilisateur</th><th>Tel</th><th>Email</th><th>Options</th></tr>
+                    <tr [ngStyle]="{'color': x.ACTIF==1 ? 'black' : 'red' }" *ngFor="let x of usersNotChecked; let i = index">
+                        <td class="pt-2 pb-2"> {{checNiveau(x.NIVEAU)}}</td>
+                        <!-- <td *ngIf="!is_nombre" class="pt-2 pb-2"> {{checNiveau(x.NIVEAU)}}</td>
+                        <td *ngIf="is_nombre" class="pt-2 pb-2"></td> -->
+                        <td class="pt-2 pb-2">{{x.NAME}}</td>
+                        <td class="pt-2 pb-2">{{x.LASTNAME}}</td>
+                        <td class="pt-2 pb-2">{{x.USERNAME}}</td>
+                        <td class="pt-2 pb-2">{{x.TEL}}</td>
+                        <td class="pt-2 pb-2">{{x.EMAIL}}</td>
+                        <td class="pt-1 pb-1">
+                             <button *ngIf="usersession.data.ID!=x.CREATED_BY" class="btn btn-success  btn-sm" (click)="verifier(x.ID)">Valider</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="col-md-12" style="margin-bottom: 30px;" *ngIf="usersession.data.VALIDATION_LEVEL>=2">
+                <h5 class="badge-success">Listes des utilisateurs deja verifiés</h5>
+                <table style="font-size: 10px;" class="table  table-bordered">
+                    <tr><th>profil</th><th>Nom</th><th>Prenom</th><th>nom d'utilisateur</th><th>Tel</th><th>Email</th><th>Options</th></tr>
+                    <tr [ngStyle]="{'color': x.ACTIF==1 ? 'black' : 'red' }" *ngFor="let x of usersChecked; let i = index">
+                        <td class="pt-2 pb-2"> {{checNiveau(x.NIVEAU)}}</td>
+                        <!-- <td *ngIf="!is_nombre" class="pt-2 pb-2"> {{checNiveau(x.NIVEAU)}}</td>
+                        <td *ngIf="is_nombre" class="pt-2 pb-2"></td> -->
+                        <td class="pt-2 pb-2">{{x.NAME}}</td>
+                        <td class="pt-2 pb-2">{{x.LASTNAME}}</td>
+                        <td class="pt-2 pb-2">{{x.USERNAME}}</td>
+                        <td class="pt-2 pb-2">{{x.TEL}}</td>
+                        <td class="pt-2 pb-2">{{x.EMAIL}}</td>
+                        <td class="pt-1 pb-1">
+                            <button class="btn btn-info  btn-sm" (click)="initialiser(x.ID,x.USERNAME,x.EMAIL)">Initialiser le mot de passe</button>
+                            <button class="btn btn-success  btn-sm" (click)="update(x)">Modifier</button>
+                            <button *ngIf="x.ACTIF==1" class="btn btn-danger  btn-sm" (click)="desactive(x)">Désactiver</button>
+                            <button *ngIf="x.ACTIF==0" class="btn btn-primary  btn-sm" (click)="desactive(x)">Activer</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        
+        </div>
+      </div>
+    </div>
+</div>
+<div id="fin" ></div>

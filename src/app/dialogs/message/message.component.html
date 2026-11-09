@@ -1,0 +1,14 @@
+<div class="header">
+    <!-- <h2 mat-dialog-title>Message</h2> -->
+    
+    <!-- <button type="button"  [mat-dialog-close]="false" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button> -->
+</div>
+<div mat-dialog-content style="color:green ; font-size: 18px;">
+    {{data?.message}}
+</div>
+<div mat-dialog-actions [align]="'end'">
+    <button mat-raised-button [mat-dialog-close]="false" class="btn btn-danger">{{data?.cancelText}}</button>
+    
+</div>

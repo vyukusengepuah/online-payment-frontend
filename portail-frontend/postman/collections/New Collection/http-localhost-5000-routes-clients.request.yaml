@@ -1,0 +1,19 @@
+$kind: http-request
+name: http://localhost:5000/routes/clients
+description: ""
+url: http://localhost:5000/routes/clients
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"merchantCode\": \"46547\",\r
+
+    \    \"name\": \"AKAGURIRO\",\r
+
+    \    \"url_callback\": \"https://mon-site.com/callback\",\r
+
+    \    \"type\": \"MERCHANT\"\r
+
+    }"
+order: 1000

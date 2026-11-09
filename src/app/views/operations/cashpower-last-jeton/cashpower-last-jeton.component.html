@@ -1,0 +1,32 @@
+<div class="card card-default">
+      
+    <div class="card-body">
+        
+        <form [formGroup]="user_form" (ngSubmit)="compteur_lastToken()" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <mat-form-field appearance="fill"  style="width: 100%;">
+                        <mat-label>COMPTEUR : <span style="color: red;">*</span></mat-label>
+                        <mat-select formControlName="compteur">    
+                            <mat-option *ngFor="let c of compteur" [value]="c.CODE">
+                                {{c.CODE}} ({{c.PROPRIETAIRE}})
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <span *ngIf="compteur.length==0" style="color: red;">Vous n'avez aucun achat cashpower</span>
+                </div>
+                <div class="col-md-4 form-group">
+                    <button type="submit" class="btn btn-success"> Rechercher</button>
+                </div>
+            </div>
+            
+        </form>
+
+        
+        <div style="width: 100%; min-height: 100px">
+            <table style="font-size: 10px;">
+                <tr class="table  table-bordered" *ngFor="let s of tableau_token"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+
+<form [formGroup]="user_form" (ngSubmit)="research()" method="POST" enctype="multipart/form-data">
+    <div class="animated fadeIn">
+        <div class="card card-default">
+          
+            <div class="card-body">
+                
+                    <div class="row" style="margin-bottom: -40px;">
+
+                        <div class="col-md-4 form-group">
+                            
+                            <mat-form-field appearance="fill"  style="width: 100%;">
+                                <mat-label>Selectionnez le type de Service : <span style="color: red;">*</span></mat-label>
+                                <mat-select formControlName="type" 
+                                 >
+                                    <mat-option [value]="'1'">
+                                        Paiement facture
+                                    </mat-option>
+                                    <mat-option [value]="'2'">
+                                        Cashpower
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field> 
+        
+                            
+                        </div>
+    
+                        <div class="col-md-5 form-group">
+                                            
+                            <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                                <mat-label>Saisissez le numero du compteur ou code d'installation: <span style="color: red;">*</span></mat-label>
+                                <input matInput formControlName="compteur" id="compte" autocomplete="off"> 
+                                
+                            </mat-form-field>
+        
+                            
+                        </div>
+                       
+                        <div class="col-md-2 form-group" style="padding: 10px;">
+                            
+                            <input type="submit" id="submit"  class="btn btn-success active form-control" value="Recherche">    
+                        </div>
+        
+                        
+                    
+                    </div>
+                
+                <div class="row">
+                    
+                                    
+                                 
+                </div>
+              </div>
+        </div>
+        
+        <div class="card card-default" *ngIf="is_confirmation">
+          
+            <div class="card-body">
+                
+                <div style="width: 60%; min-height: 100px">
+                    <table style="font-size: 10px;">
+                        <tr class="table  table-bordered" *ngFor="let s of tableau_facture"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+                    </table>
+                </div>
+                    <button style="margin-top: 30px;" (click)="initier_ajout()" type="button" class="btn btn-success"> Initier l'ajout compteur</button>
+
+              </div>
+        </div>
+    </div>
+</form>

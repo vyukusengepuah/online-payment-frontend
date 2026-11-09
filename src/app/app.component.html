@@ -1,0 +1,8 @@
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- <mat-progress-bar style="color: red;" *ngIf="progressBar" mode="indeterminate" class="progress"  ></mat-progress-bar> -->
+<div class="loading-overlay" *ngIf="progressBar">
+  <div class="spinner"></div>
+</div>
+<router-outlet></router-outlet>

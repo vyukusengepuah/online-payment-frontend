@@ -1,0 +1,15 @@
+.nav-link.active, .nav-pills .show > .nav-link {
+    background-color: #CD853F !important;
+    color: white !important;
+    border-radius: 0;
+    border: 3px solid #CD853F;
+    padding-bottom: 2px;      
+  }
+  .nav-link {
+    margin-bottom: 25px !important;
+    color: #CD853F !important;
+    border: 3px solid #CD853F !important;      
+  }
+  .nav-tabs{
+    border-bottom: 0 !important;
+  }
