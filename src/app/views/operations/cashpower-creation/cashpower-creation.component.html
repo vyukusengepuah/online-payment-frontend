@@ -1,0 +1,154 @@
+<div bsModal  #largeModal="bs-modal"[config]="{backdrop: 'static',  keyboard: false}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-success" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{message}}</h4>
+          <button style="color: red;" type="button" class="close" (click)="largeModal.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          
+  
+          <div style="width: 100%; min-height: 100px">
+            <table style="font-size: 10px;">
+                <tr class="table  table-bordered" *ngFor="let s of tableau_facture"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+            </table>
+          </div>
+          
+  
+        </div>
+        <div class="modal-footer">
+            <form [formGroup]="user_form1"  method="POST" enctype="multipart/form-data">
+                <mat-form-field appearance="fill"  style="width: 100%;">
+                    <mat-label>COMPTE DE PAIEMENT : <span style="color: red;">*</span></mat-label>
+                    <mat-select formControlName="compte_paiement"
+                     >
+                    
+                            
+                        <mat-option *ngFor="let c of comptes_paiement" [value]="c.COMPTE_ID">
+                            {{c.COMPTE}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button type="submit" class="btn btn-success">Oui créer</button>
+                <button type="button" class="btn btn-danger" (click)="largeModal.hide()">Non</button>
+                <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button>
+                <!-- <button type="button" class="btn btn-success">Ajouter</button> -->
+            </form>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div>
+
+<form [formGroup]="user_form" (ngSubmit)="research()" method="POST" enctype="multipart/form-data">
+<div class="animated fadeIn">
+    <div class="card card-default">
+      
+        <div class="card-body">
+            
+                <div class="row" style="margin-bottom: -40px;">
+
+                    <div class="col-md-4 form-group">
+                        <mat-form-field appearance="fill"  style="width: 100%;">
+                            <mat-label>Selectionnez le compteur: <span style="color: red;">*</span></mat-label>
+                            <mat-select formControlName="compteur">    
+                                <mat-option *ngFor="let c of compteur" [value]="c.CODE">
+                                    {{c.CODE}} ({{c.PROPRIETAIRE}})
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field> 
+                                        
+                        <!-- <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                            <mat-label>NUMERO DU COMPTEUR: <span style="color: red;">*</span></mat-label>
+                            <input matInput formControlName="compteur" id="compte" autocomplete="off"> 
+                            
+                        </mat-form-field> -->
+    
+                        
+                    </div>
+                    <div class="col-md-4 form-group">
+                        
+                        <mat-form-field appearance="fill"  style="width: 100%;">
+                            <mat-label>Type achat : <span style="color: red;">*</span></mat-label>
+                            <mat-select formControlName="type" (selectionChange)="select_type($event);"
+                             >
+                                <mat-option [value]="'1'">
+                                    MONTANT
+                                </mat-option>
+                                <!-- <mat-option [value]="'2'">
+                                    KWH
+                                </mat-option> -->
+                            </mat-select>
+                        </mat-form-field> 
+    
+                        
+                    </div>
+                    <div class="col-md-4 form-group" *ngIf="is_montant">
+                                        
+                        <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                            <mat-label>Montant: <span style="color: red;">*</span></mat-label>
+                            <input matInput formControlName="Montant" id="Montant" autocomplete="off"> 
+                            
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4 form-group" *ngIf="is_kwh">
+                                        
+                        <mat-form-field class="example-full-width" appearance="fill" style="width: 100%;">
+                            <mat-label>Nombre de KWH: <span style="color: red;">*</span></mat-label>
+                            <input matInput formControlName="KWH" id="KWH" autocomplete="off"> 
+                            
+                        </mat-form-field>
+                    </div>
+                   
+                    <div class="col-md-2 form-group" style="padding: 10px;">
+                        
+                        <input type="submit" id="submit"  class="btn btn-success active form-control" value="Rechercher">    
+                    </div>
+    
+                    
+                
+                </div>
+            
+            <div class="row">
+                
+                                
+                             
+            </div>
+          </div>
+    </div>
+    
+    <div class="card card-default" *ngIf="is_confirmation">
+      
+        <div class="card-body row">
+            
+            <div style="width: 60%; min-height: 100px;margin-bottom: 20px;">
+                <table style="font-size: 10px;">
+                    <tr class="table  table-bordered" *ngFor="let s of tableau_facture"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <form [formGroup]="user_form1" (ngSubmit)="enregistrer_cashpower()" method="POST" enctype="multipart/form-data">
+                    <mat-form-field appearance="fill"  style="width: 100%;">
+                        <mat-label>COMPTE DE PAIEMENT : <span style="color: red;">*</span></mat-label>
+                        <mat-select formControlName="compte_paiement"
+                        >
+                        
+                                
+                            <mat-option *ngFor="let c of comptes_paiement" [value]="c.COMPTE_ID">
+                                {{c.COMPTE}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <button type="submit" class="btn btn-success"> Initier l'achat de cashpower</button>
+                    <!-- <button type="button" class="btn btn-danger" (click)="largeModal.hide()">Non</button>
+                    <button type="button" class="btn btn-secondary" (click)="largeModal.hide()">Close</button> -->
+                    <!-- <button type="button" class="btn btn-success">Ajouter</button> -->
+                </form>
+            </div>
+          </div>
+    </div>
+</div>
+</form>

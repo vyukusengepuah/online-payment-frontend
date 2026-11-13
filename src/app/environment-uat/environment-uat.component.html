@@ -1,0 +1,134 @@
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="page-title m-0">Gestion des Environnements UAT</h2>
+  <button class="btn btn-retour" (click)="retourMenu()">← Retour au menu</button>
+</div>
+
+  <!-- Section : Sélection de l'environnement actif -->
+  <div class="card custom-card mb-4">
+    <div class="card-header custom-header">
+      <strong>Environnement actif</strong>
+    </div>
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label">Choisir un environnement</label>
+        <select class="form-select" (change)="selectionnerEnvironment($event)">
+          <option value="">-- Choisir un environnement --</option>
+          <option *ngFor="let env of listeEnvironments" [value]="env.id">
+            {{ env.merchantCode }} - {{ env.client_id }} ({{ env.description }})
+          </option>
+        </select>
+        <small class="text-muted">
+          Cet environnement sera utilisé pour l'obtention du token et l'initiation du paiement.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section : Formulaire de création / modification -->
+  <div class="card custom-card">
+    <div class="card-header custom-header">
+      <strong>{{ environmentSelectionne ? 'Modifier l\'environnement' : 'Créer un nouvel environnement' }}</strong>
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="environmentSelectionne ? mettreAJourEnvironment() : creerEnvironment()">
+        
+        <!-- Ligne 1 : Gateway URL et Type -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Gateway URL</label>
+            <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.gateway_url" name="gateway_url" readonly>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Type de partenaire</label>
+            <select class="form-select" [(ngModel)]="nouvelEnvironment.type" name="type">
+              <option value="MERCHANT">Merchant (Commerçant)</option>
+              <option value="BILLER">Biller (Facturier)</option>
+            </select>
+          </div>
+
+          <!-- Choix de la base cible -->
+           <div class="col-md-6 mb-3">
+             <label class="form-label">Enregistrer dans</label>
+              <select class="form-select" [(ngModel)]="baseCible" name="baseCible">
+               <option value="local">Base locale (tests)</option>
+                <option value="uat">Base BANCOBU UAT (entreprise)</option>
+                 <option value="both">Les deux (local + UAT)</option>
+                  </select>
+                   <small class="text-muted">Choisissez où enregistrer le partenaire.</small>
+                    </div>
+    </div>
+
+        <!-- Ligne 2 : Client ID et Merchant Code -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Client ID (manuel)</label>
+            <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.client_id" name="client_id" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Merchant Code</label>
+            <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.merchantCode" name="merchantCode" required>
+          </div>
+        </div>
+
+        <!-- Ligne 3 : Client Secret (info) et Merchant PIN -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Client Secret</label>
+            <input type="text" class="form-control" value="Généré par Keycloak" readonly>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Merchant PIN</label>
+            <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.merchantPin" name="merchantPin" required>
+          </div>
+        </div>
+
+        <!-- Ligne 4 : Customer Account et Amount -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Customer Account (Wallet)</label>
+            <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.customerAccount" name="customerAccount" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Amount</label>
+            <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.amount" name="amount" required>
+          </div>
+        </div>
+
+        <!-- Ligne 5 : Description -->
+        <div class="mb-3">
+          <label class="form-label">Description</label>
+          <input type="text" class="form-control" [(ngModel)]="nouvelEnvironment.description" name="description">
+        </div>
+
+        <!-- Section : Gestion du Client Secret -->
+        <div class="mb-3 p-3 custom-radio-group">
+          <label class="form-label"><strong>Gestion du Client Secret</strong></label>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="modeSecret" id="recuperer" value="recuperer" [(ngModel)]="modeSecret">
+            <label class="form-check-label" for="recuperer">Récupérer le secret existant (recommandé)</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="modeSecret" id="regenerer" value="regenerer" [(ngModel)]="modeSecret">
+            <label class="form-check-label" for="regenerer">Générer un nouveau secret (⚠️ risqué)</label>
+          </div>
+        </div>
+
+        <!-- Boutons -->
+        <div class="d-flex gap-2">
+          <!-- Bouton "Nouvel environnement" : TOUJOURS visible -->
+          <button type="button" class="btn btn-secondary" (click)="nouvelEnvironnementVide()">
+            Réinitialiser
+          </button>
+
+          <!-- Bouton de soumission : Créer ou Mettre à jour -->
+          <button type="submit" class="btn btn-primary custom-btn flex-grow-1"
+                  [disabled]="!nouvelEnvironment.client_id || !nouvelEnvironment.merchantCode">
+            {{ environmentSelectionne ? 'Mettre à jour l\'environnement' : 'Créer l\'environnement' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

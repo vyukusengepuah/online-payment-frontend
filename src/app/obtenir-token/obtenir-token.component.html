@@ -1,0 +1,71 @@
+<div class="container mt-4">
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="page-title m-0">Obtenir le Token</h2>
+  <button class="btn btn-retour" (click)="retourMenu()">← Retour au menu</button>
+</div>
+
+  <!-- Sélection de l'environnement -->
+  <div class="card custom-card mb-4">
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label"><strong>Environnement</strong></label>
+        <select class="form-select" (change)="selectionnerEnvironment($event)">
+          <option value="">-- Choisir un environnement --</option>
+          <option *ngFor="let env of listeEnvironments" [value]="env.id">
+            {{ env.merchantCode }} - {{ env.client_id }} ({{ env.type }})
+          </option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fiche AVANT (s'affiche automatiquement) -->
+  <div *ngIf="environmentSelectionne" class="card custom-card mb-4">
+    <div class="card-header custom-header">
+      <strong>Détails de l'environnement (avant obtention)</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- On n'affiche que les champs nécessaires -->
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.gateway_url"><strong>Gateway URL :</strong> {{ environmentSelectionne.gateway_url }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.client_id"><strong>Client ID :</strong> {{ environmentSelectionne.client_id }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.client_secret"><strong>Client Secret :</strong> {{ environmentSelectionne.client_secret }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.merchantCode"><strong>Merchant Code :</strong> {{ environmentSelectionne.merchantCode }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton Send -->
+  <div *ngIf="environmentSelectionne" class="mb-4">
+    <button class="btn btn-primary custom-btn w-100" (click)="obtenirToken()" [disabled]="chargement">
+      {{ chargement ? 'Chargement...' : 'Send' }}
+    </button>
+  </div>
+
+  <!-- Fiche APRÈS -->
+  <div *ngIf="environmentMisAJour" class="card custom-card border-success">
+    <div class="card-header bg-success text-white">
+      <strong>Détails de l'environnement (après obtention)</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Tous les champs -->
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.gateway_url"><strong>Gateway URL :</strong> {{ environmentMisAJour.gateway_url }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.client_id"><strong>Client ID :</strong> {{ environmentMisAJour.client_id }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.client_secret"><strong>Client Secret :</strong> {{ environmentMisAJour.client_secret }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.merchantCode"><strong>Merchant Code :</strong> {{ environmentMisAJour.merchantCode }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.merchantPin"><strong>Merchant PIN :</strong> {{ environmentMisAJour.merchantPin }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.customerAccount"><strong>Customer Account :</strong> {{ environmentMisAJour.customerAccount }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.amount"><strong>Amount :</strong> {{ environmentMisAJour.amount }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.type"><strong>Type :</strong> {{ environmentMisAJour.type }}</div>
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.description"><strong>Description :</strong> {{ environmentMisAJour.description }}</div>
+        <!-- Le token -->
+        <div class="col-md-12 mb-2" *ngIf="environmentMisAJour.access_token">
+          <strong>Access Token :</strong>
+          <textarea class="form-control" rows="4" readonly>{{ environmentMisAJour.access_token }}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

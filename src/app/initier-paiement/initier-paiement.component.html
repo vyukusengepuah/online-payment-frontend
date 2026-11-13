@@ -1,0 +1,118 @@
+<!-- ========================================== -->
+<!-- COMPOSANT : INITIER UN PAIEMENT -->
+<!-- Ce formulaire s'adapte au type de partenaire -->
+<!-- (Merchant ou Biller) sélectionné. -->
+<!-- ========================================== -->
+
+<div class="container mt-4">
+  
+  <div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="page-title m-0">Initier un Paiement</h2>
+  <button class="btn btn-retour" (click)="retourMenu()">← Retour au menu</button>
+</div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 1 : SÉLECTION DE L'ENVIRONNEMENT -->
+  <!-- ========================================== -->
+  <div class="card custom-card mb-4">
+    <div class="card-body">
+      <div class="mb-3">
+        <label class="form-label"><strong>Environnement</strong></label>
+        <!-- Menu déroulant pour sélectionner un environnement -->
+        <!-- On affiche le code et le type (MERCHANT ou BILLER) -->
+        <select class="form-select" (change)="selectionnerEnvironment($event)">
+          <option value="">-- Choisir un environnement --</option>
+          <option *ngFor="let env of listeEnvironments" [value]="env.id">
+            {{ env.merchantCode }} - {{ env.client_id }} ({{ env.type }})
+          </option>
+        </select>
+        <small class="text-muted">
+          Sélectionnez un environnement pour initier le paiement.
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 2 : FICHE AVANT L'INITIATION -->
+  <!-- On affiche les champs nécessaires selon le type -->
+  <!-- ========================================== -->
+  <div *ngIf="environmentSelectionne" class="card custom-card mb-4">
+    <div class="card-header custom-header">
+      <strong>Détails de l'environnement (avant initiation)</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Champ commun : Gateway URL -->
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.gateway_url">
+          <strong>Gateway URL :</strong> {{ environmentSelectionne.gateway_url }}
+        </div>
+
+        <!-- ========================================== -->
+        <!-- CHAMPS SPÉCIFIQUES AU MERCHANT -->
+        <!-- ========================================== -->
+        <ng-container *ngIf="environmentSelectionne.type === 'MERCHANT'">
+          <div class="col-md-6 mb-2">
+            <strong>Merchant Code :</strong> {{ environmentSelectionne.merchantCode }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Merchant PIN :</strong> {{ environmentSelectionne.merchantPin }}
+          </div>
+        </ng-container>
+
+        <!-- ========================================== -->
+        <!-- CHAMPS SPÉCIFIQUES AU BILLER -->
+        <!-- ========================================== -->
+        <ng-container *ngIf="environmentSelectionne.type === 'BILLER'">
+          <div class="col-md-6 mb-2">
+            <strong>Biller Code :</strong> {{ environmentSelectionne.merchantCode }}
+          </div>
+        </ng-container>
+
+        <!-- ========================================== -->
+        <!-- CHAMPS COMMUNS (Merchant et Biller) -->
+        <!-- ========================================== -->
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.customerAccount">
+          <strong>Compte Client :</strong> {{ environmentSelectionne.customerAccount }}
+        </div>
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.amount">
+          <strong>Montant :</strong> {{ environmentSelectionne.amount }}
+        </div>
+        <div class="col-md-6 mb-2" *ngIf="environmentSelectionne.description">
+          <strong>Description :</strong> {{ environmentSelectionne.description }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 3 : BOUTON D'INITIATION -->
+  <!-- ========================================== -->
+  <div *ngIf="environmentSelectionne" class="mb-4">
+    <button class="btn btn-primary custom-btn w-100" (click)="initierPaiement()" [disabled]="chargement">
+      {{ chargement ? 'Traitement en cours...' : 'Initier le Paiement' }}
+    </button>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- SECTION 4 : FICHE APRÈS L'INITIATION -->
+  <!-- On affiche les résultats du paiement -->
+  <!-- ========================================== -->
+  <div *ngIf="environmentMisAJour" class="card custom-card border-success">
+    <div class="card-header bg-success text-white">
+      <strong>Résultats du paiement</strong>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <!-- Transaction ID (retourné par Bancobu) -->
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.transactionID">
+          <strong>Transaction ID :</strong> {{ environmentMisAJour.transactionID }}
+        </div>
+        <!-- Merchant Trans ID (généré par notre application) -->
+        <div class="col-md-6 mb-2" *ngIf="environmentMisAJour.merchantTransID">
+          <strong>Merchant Trans ID :</strong> {{ environmentMisAJour.merchantTransID }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

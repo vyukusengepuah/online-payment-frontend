@@ -1,0 +1,34 @@
+<div class="animated fadeIn">
+    <div class="card card-default">
+      
+      <div class="card-body">
+        
+        <div class="row">
+
+            <div class="col-md-12 sm-12 xs-12">
+                <h5 class="bg-success">Historique d'achat cashpower </h5>    
+            </div> 
+            <div class="col-md-7 sm-7">  
+            
+                <table style="font-size: 10px;">
+                    <tr class="table  table-bordered" *ngFor="let s of tableau_facture"><td style="font-weight: bold;" class="pt-2 pb-2"> {{s.KEY}}</td><td class="pt-2 pb-2">{{s.VALUE}}</td></tr>
+                </table>
+            </div>
+            <div class="col-md-5 sm-5">
+                <table style="font-size: 10px;">
+                    <tr class="table  table-bordered">
+                        <th>DATE</th><th>UTILISATEUR</th><th>NIVEAU</th><th>ACTION</th>
+                    </tr>
+                    <tr class="table  table-bordered" *ngFor="let s of infos;let x = index">
+                        <td>{{s.DATETIME}}</td><td>{{s.NAME}}({{s.TEL}})</td><td>{{s.NIVEAU}}</td><td>{{s.STATUT=='2'?"ANNULATION":(s.STATUT=='1'?"VALIDATION":(x==0?"CREATION":"MODIFICATION"))}}</td>
+                    </tr>
+                </table>
+            </div>
+                
+             
+
+        </div>
+
+      </div>
+    </div>
+</div>

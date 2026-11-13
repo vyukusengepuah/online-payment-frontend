@@ -1,0 +1,195 @@
+<div class="animated fadeIn">
+    <div class="card card-default">
+      
+      <div class="card-body">
+        <form [formGroup]="user_form_search" method="POST" enctype="multipart/form-data">
+            <div class="row" style="margin-bottom: -40px;">
+                <div class="col-md-9">
+                    
+                </div>
+                <div class="col-md-3">
+                    <div class="wb-traffic-inner notika-shadow sm-res-mg-t-30 tb-res-mg-t-30">
+                        <div class="website-traffic-ctn">
+                            <h4>{{fullDate}}</h4>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="col-md-2  form-group">
+                                    
+                  <div id="input_date" class="example-full-width input_date" appearance="fill"   >
+                      
+                          <mat-label>Date Debut: </mat-label>
+                          <input  readonly  name="dp"  matInput formControlName="date1" id="date1" autocomplete="off" placeholder="dd/mm/yyyy" (click)="dd1.toggle()"
+                              ngbDatepicker  #dd1="ngbDatepicker"  (ngModelChange)="filtre()"> 
+                          
+                              
+                  </div>
+              
+                      <mat-form-field style="display: none;">
+                          <input   name="dp"  matInput formControlName="date3" id="date2" autocomplete="off" placeholder="dd/mm/yyyy" (click)="dd1.toggle()"
+                          ngbDatepicker > 
+                      </mat-form-field>
+
+
+                  
+              </div>
+
+              <div class="col-md-2  form-group" >
+                                  
+                  <div id="input_date" class="example-full-width input_date" appearance="fill"   >
+                      
+                          <mat-label>Date Fin: </mat-label>
+                          <input  readonly  name="dp"  matInput formControlName="date2" id="date2" autocomplete="off" placeholder="dd/mm/yyyy" (click)="dd2.toggle()"
+                              ngbDatepicker #dd2="ngbDatepicker" (ngModelChange)="filtre()"> 
+                          
+                              
+                  </div>
+              
+                      <mat-form-field style="display: none;">
+                          <input   name="dp"  matInput formControlName="date3" id="date2" autocomplete="off" placeholder="dd/mm/yyyy" (click)="dd2.toggle()"
+                          ngbDatepicker > 
+                      </mat-form-field>
+
+
+                  
+              </div>
+
+              <div class="col-md-5 form-group" >
+                                        
+                <mat-form-field appearance="fill"  style="width: 100%;">
+                    <mat-label>ENTITE: <span style="color: red;">*</span></mat-label>
+                    <mat-select formControlName="entite" (click)="refresh_entites()"
+                    (selectionChange)="comptes_entites($event);filtre()">
+                    
+                        <mat-option>
+                            <ngx-mat-select-search formControlName="filter_entites"
+                            placeholderLabel="Research..." 
+                            (keyup)="onKey_entites($event.target.value)" (click)="refresh_entites()"></ngx-mat-select-search>
+                        
+                        </mat-option>
+                        <mat-option  [value]="0" *ngIf="!id__user">
+                            --
+                        </mat-option>
+                            
+                        <mat-option *ngFor="let p of entites_filtre" [value]="p.SOCIETE_ID">
+                            {{p.CUSTOMERNAME}}({{p.IDNUMBER}})
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field> 
+
+                
+            </div>
+            <div class="col-md-3 form-group" > 
+                                        
+              <mat-form-field appearance="fill"  style="width: 100%;">
+                  <mat-label>COMPTE: <span style="color: red;">*</span></mat-label>
+                  <mat-select formControlName="compte" (selectionChange)="filtre()"
+                   >
+                    <mat-option  [value]="0">
+                    --
+                    </mat-option>
+                      <mat-option *ngFor="let p of comptes" [value]="p.COMPTE_ID">
+                          {{p.COMPTE}}
+                      </mat-option>
+
+                  </mat-select>
+              </mat-form-field> 
+
+              
+          </div>
+                
+            
+            </div>
+        </form>
+        <div class="row">
+            
+                            
+                         
+        </div>
+      </div>
+    </div>
+</div>
+
+<div class="animated fadeIn">
+    <div class="card card-default">
+      <div class="card-body">
+        <div class="row justify-content-center">
+
+          <div class='col-md m-2' style="background-color: #eeeeee;"> 
+
+              <h6 style="color: red;">ENTITES</h6>
+              <!-- <div style="text-align: center;"><h1 style="color: red;">{{client_D1}}</h1></div> -->
+              <div style="width: 30%;float: left;border-right: 1px white solid;" class="justify-content-center">
+                <h6>Effectif</h6>
+                  <h2 style="color: red;width: 100%;text-align: center;" id="entite_n">
+                      <div class="loading-container"><div class="loading"></div> <div class="loading-text">loading</div></div>
+                  </h2>
+              </div>
+              <div style="width: 70%;float: right;padding-left: 10px;" class="justify-content-center">
+                <h6>Leurs comptes</h6>
+                <h2 style="color: red;width: 100%;text-align: center;" id="entite_m">
+                    <div class="loading-container"><div class="loading"></div> <div class="loading-text">loading</div></div>
+                </h2>
+              </div>
+              
+              <div class="row">
+                  <div (click)="export('ENTITE','EXCEL')" style="margin: 2px;"><button class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</button></div>
+                  <div (click)="export('ENTITE','CSV')" style="margin: 2px;"><button class="btn btn-success">CSV</button></div>
+              </div>
+
+          </div>
+          <div class='col-md m-2' style="background-color: #eeeeee;"> 
+
+            <h6 style="color: red;">FACTURE</h6>
+            <!-- <div style="text-align: center;"><h1 style="color: red;">{{client_D1}}</h1></div> -->
+            <div style="width: 30%;float: left;border-right: 1px white solid;" class="justify-content-center">
+              <h6>Effectif</h6>
+                <h2 style="color: red;width: 100%;text-align: center;" id="facture_n">
+                    <div class="loading-container"><div class="loading"></div> <div class="loading-text">loading</div></div>
+                </h2>
+            </div>
+            <div style="width: 70%;float: right;padding-left: 10px;" class="justify-content-center">
+              <h6>Montant</h6>
+              <h2 style="color: red;width: 100%;text-align: center;" id="facture_m">
+                  <div class="loading-container"><div class="loading"></div> <div class="loading-text">loading</div></div>
+              </h2>
+            </div>
+            
+            <div class="row">
+                <div (click)="export('FACTURE','EXCEL')" style="margin: 2px;"><button class="btn btn-success" ><i class="fa fa-file-excel-o"></i> Excel</button></div>
+                <div (click)="export('FACTURE','CSV')" style="margin: 2px;"><button class="btn btn-success" >CSV</button></div>
+            </div>
+
+        </div>
+        <div class='col-md m-2' style="background-color: #eeeeee;"> 
+
+          <h6 style="color: red;">CASHPOWER</h6>
+          <!-- <div style="text-align: center;"><h1 style="color: red;">{{client_D1}}</h1></div> -->
+          <div style="width: 30%;float: left;border-right: 1px white solid;" class="justify-content-center">
+            <h6>Effectif</h6>
+              <h2 style="color: red;width: 100%;text-align: center;" id="cashpower_n">
+                  <div class="loading-container"><div class="loading"></div> <div class="loading-text">loading</div></div>
+              </h2>
+          </div>
+          <div style="width: 70%;float: right;padding-left: 10px;" class="justify-content-center">
+            <h6>Montant</h6>
+            <h2 style="color: red;width: 100%;text-align: center;" id="cashpower_m">
+                <div class="loading-container"><div class="loading"></div> <div class="loading-text">loading</div></div>
+            </h2>
+          </div>
+          
+          <div class="row">
+              <div (click)="export('CASHPOWER','EXCEL')"  style="margin: 2px;"><button class="btn btn-success"><i class="fa fa-file-excel-o"></i> Excel</button></div>
+              <div (click)="export('CASHPOWER','CSV')" style="margin: 2px;"><button class="btn btn-success">CSV</button></div>
+          </div>
+
+      </div>
+          
+
+        </div>
+      </div>
+    </div>
+    
+</div>
+

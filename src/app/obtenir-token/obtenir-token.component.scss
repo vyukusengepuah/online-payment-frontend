@@ -1,0 +1,64 @@
+/* Styles personnalisés pour le composant Obtenir Token */
+
+.page-title {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.custom-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.custom-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  border-radius: 10px 10px 0 0;
+  padding: 1rem 1.25rem;
+  color: #2c3e50;
+}
+
+.custom-btn {
+  padding: 0.75rem;
+  font-weight: 600;
+  background-color: #3498db;
+  border-color: #3498db;
+
+  &:hover:not(:disabled) {
+    background-color: #2980b9;
+    border-color: #2980b9;
+  }
+
+  &:disabled {
+    background-color: #95a5a6;
+    border-color: #95a5a6;
+  }
+}
+
+.form-control, .form-select {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  padding: 0.5rem 0.75rem;
+}
+
+.form-label {
+  font-weight: 500;
+  color: #34495e;
+}
+
+.btn-retour {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border-radius: 6px;
+  transition: background-color 0.2s, border-color 0.2s;
+
+  &:hover {
+    background-color: #5a6268;
+    border-color: #545b62;
+  }
+}
